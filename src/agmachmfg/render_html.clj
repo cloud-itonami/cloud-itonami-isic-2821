@@ -73,7 +73,7 @@
 
   Usage: `clojure -M:dev:render-html [out-file]`
   (default `docs/samples/operator-console.html`)."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [jp-go-dds.skin]
             [langgraph.graph :as g]
             [agmachmfg.advisor :as advisor]
@@ -303,7 +303,7 @@
         names     (deep-key-names registers)
         approver? #(contains? #{"approved-by" "approved_by" "approver"
                                 "approved-by-id" "approved_by_id"}
-                              (str/lower-case %))
+                              (str/lower %))
         granted   (keep #(fact-of (:audit %) :approval-granted) runs)]
     {:approvers   (vec (sort (into #{} (keep :by) granted)))
      :approvals   (count granted)
