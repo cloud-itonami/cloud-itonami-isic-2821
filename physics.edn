@@ -1,0 +1,33 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README: the ISIC 2821 plant assembles and tests tractors, combines,
+;; tillage implements, balers and forestry harvesters. The robots' physical
+;; work: the end-of-line brake run of a tractor on the test slope (how the
+;; longitudinal tip-over margin shrinks with the grade), and incoming tensile
+;; test of the drawbar / hitch-link steel.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-2821"
+ :cases
+ [{:id :tractor-slope-brake-run
+   :kind :transport
+   :procedure "finished tractor with a rear-mounted implement drives the test slope at 20 km/h and brakes to a stop"
+   :params {:mass-kg 4000.0 :payload-kg 800.0 :distance-m 100.0 :v-max-mps 5.5 :a-max-mps2 1.0
+            :brake-decel-mps2 3.0 :drive-force-n 20000.0 :crr 0.03
+            :cog-height-m 1.0 :support-half-length-m 1.2 :payload-cog-height-m 1.0
+            :max-time-s 600.0}
+   :sweep {:param :slope-deg :values [0.0 5.0 10.0 15.0 20.0]}
+   :quantity :min-tipover-margin
+   :limit {:min 0.5 :basis "estimate: longitudinal reserve at a 3 m/s2 service stop; the tractor's roll-over protection is certified separately (OECD tractor codes), not by this number"}
+   :boundary {:lo 0.0 :hi 30.0}}
+  {:id :drawbar-steel-tensile
+   :kind :material
+   :procedure "tensile test of a 100 mm2 specimen from an incoming S355 plate lot before the drawbar / lower hitch links are cut from it"
+   :params {:length-m 0.10 :area-m2 1.0e-4 :youngs-modulus-pa 210.0e9 :hardening-pa 1.0e9
+            :density-kg-m3 7850.0 :max-force-n 55000.0}
+   :sweep {:param :yield-stress-pa :values [300.0e6 330.0e6 355.0e6 380.0e6 420.0e6]}
+   :quantity :yield-force-n
+   :limit {:min 35500.0 :basis "EN 10025-2 S355: minimum yield strength 355 MPa for nominal thickness <= 16 mm, over the 100 mm2 specimen"}
+   :boundary {:lo 250.0e6 :hi 450.0e6}}]}
