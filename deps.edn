@@ -35,7 +35,7 @@
         io.github.kotoba-lang/langchain
         {:local/root "../../kotoba-lang/langchain"}
         ;; jp-go-dds (デジタル庁デザインシステム) -- the workspace's BASE
-        ;; design system (root CLAUDE.md, 2026-08-05). `agmachmfg.render-html`
+        ;; design system (root AGENTS.md, 2026-08-05). `agmachmfg.render-html`
         ;; inlines `jp-go-dds.skin/dds+skin` into the generated operator
         ;; console so the page needs no external stylesheet fetch. Git
         ;; coordinate (not :local/root) so the render-html build also works
